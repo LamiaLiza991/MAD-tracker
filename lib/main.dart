@@ -3,31 +3,63 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  final List<String> imageUrls = List.generate(
-    6,
-    (index) => 'https://via.placeholder.com/150?text=Image+${index + 1}',
-  );
-
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(title: Text("GridView Images")),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: GridView.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
+    return MaterialApp(home: HomeScreen());
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Drawer App")),
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(child: Text("Menu")),
+            ListTile(
+              title: Text("Screen A"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ScreenA()),
+                );
+              },
             ),
-            itemCount: imageUrls.length,
-            itemBuilder: (context, index) {
-              return Image.network(imageUrls[index]);
-            },
-          ),
+            ListTile(
+              title: Text("Screen B"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => ScreenB()),
+                );
+              },
+            ),
+          ],
         ),
       ),
+      body: Center(child: Text("Home")),
+    );
+  }
+}
+
+class ScreenA extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Screen A")),
+      body: Center(child: Text("Screen A")),
+    );
+  }
+}
+
+class ScreenB extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Screen B")),
+      body: Center(child: Text("Screen B")),
     );
   }
 }
