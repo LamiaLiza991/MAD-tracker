@@ -7,8 +7,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text("Local Image")),
-        body: Center(child: Image.asset("assets/images/sample.jpg")),
+        body: Center(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.lightBlue,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10,
+                  offset: Offset(5, 5),
+                ),
+              ],
+            ),
+            child: Text(
+              "Stylish Container",
+              style: TextStyle(fontSize: 20, color: Colors.white),
+            ),
+          ),
+        ),
       ),
     );
   }
