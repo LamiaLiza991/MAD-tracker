@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(MaterialApp(home: FirstScreen()));
 
-class MyApp extends StatelessWidget {
+class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Big Text', style: TextStyle(fontSize: 30)),
-              Text('Bold Text', style: TextStyle(fontWeight: FontWeight.bold)),
-              Text('Red Text', style: TextStyle(color: Colors.red)),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(title: Text("First Screen")),
+      body: Center(
+        child: ElevatedButton(
+          child: Text("Go to Second"),
+          onPressed:
+              () => Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SecondScreen()),
+              ),
+        ),
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Second Screen")),
+      body: Center(
+        child: ElevatedButton(
+          child: Text("Back"),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
     );
