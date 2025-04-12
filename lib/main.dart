@@ -2,75 +2,55 @@ import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: CustomDrawerApp());
-  }
+  _MyAppState createState() => _MyAppState();
 }
 
-class CustomDrawerApp extends StatefulWidget {
-  @override
-  _CustomDrawerAppState createState() => _CustomDrawerAppState();
-}
+class _MyAppState extends State<MyApp> {
+  String _selectedDateTime = "No date/time selected";
 
-class _CustomDrawerAppState extends State<CustomDrawerApp>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _drawerAnimation;
-  bool _isDrawerOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
+  void _pickDateTime(BuildContext context) async {
+    DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
     );
-    _drawerAnimation = Tween<Offset>(
-      begin: Offset(-1.0, 0),
-      end: Offset.zero,
-    ).animate(_controller);
-  }
 
-  void _toggleDrawer() {
-    setState(() {
-      _isDrawerOpen = !_isDrawerOpen;
-      _isDrawerOpen ? _controller.forward() : _controller.reverse();
-    });
+    if (date != null) {
+      TimeOfDay? time = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+      );
+
+      if (time != null) {
+        setState(() {
+          _selectedDateTime = '${date.toLocal()} ${time.format(context)}';
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          appBar: AppBar(
-            title: Text("Custom Drawer"),
-            leading: IconButton(
-              icon: Icon(Icons.menu),
-              onPressed: _toggleDrawer,
-            ),
-          ),
-          body: Center(child: Text("Main Content")),
-        ),
-        SlideTransition(
-          position: _drawerAnimation,
-          child: SafeArea(
-            child: Container(
-              width: 250,
-              color: Colors.white,
-              child: Column(
-                children: [
-                  ListTile(title: Text("Option 1")),
-                  ListTile(title: Text("Option 2")),
-                  ListTile(title: Text("Close"), onTap: _toggleDrawer),
-                ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Date & Time Picker")),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(_selectedDateTime),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => _pickDateTime(context),
+                child: Text("Pick Date & Time"),
               ),
-            ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
