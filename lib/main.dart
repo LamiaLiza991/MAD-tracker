@@ -3,52 +3,28 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(home: LoginScreen());
-  }
-}
-
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  String username = '', password = '';
+  final List<String> imageUrls = List.generate(
+    6,
+    (index) => 'https://via.placeholder.com/150?text=Image+${index + 1}',
+  );
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Login")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: "Username"),
-                validator:
-                    (value) => value!.isEmpty ? "Please enter username" : null,
-              ),
-              TextFormField(
-                decoration: InputDecoration(labelText: "Password"),
-                obscureText: true,
-                validator:
-                    (value) => value!.isEmpty ? "Please enter password" : null,
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // Login success
-                  }
-                },
-                child: Text("Submit"),
-              ),
-            ],
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("GridView Images")),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: GridView.builder(
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+            ),
+            itemCount: imageUrls.length,
+            itemBuilder: (context, index) {
+              return Image.network(imageUrls[index]);
+            },
           ),
         ),
       ),
