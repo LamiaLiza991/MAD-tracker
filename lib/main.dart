@@ -3,63 +3,78 @@ import 'package:flutter/material.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final List<Map<String, String>> items = List.generate(
+    5,
+    (index) => {
+      'title': 'Title $index',
+      'subtitle': 'Subtitle $index',
+      'desc': 'This is description $index',
+      'image': 'https://via.placeholder.com/150',
+    },
+  );
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: HomeScreen());
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Custom Cards")),
+        body: ListView(
+          children: items.map((item) => CustomCard(item)).toList(),
+        ),
+      ),
+    );
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class CustomCard extends StatefulWidget {
+  final Map<String, String> data;
+
+  CustomCard(this.data);
+
+  @override
+  _CustomCardState createState() => _CustomCardState();
+}
+
+class _CustomCardState extends State<CustomCard> {
+  bool _isTapped = false;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Drawer App")),
-      drawer: Drawer(
-        child: ListView(
+    return GestureDetector(
+      onTap: () => setState(() => _isTapped = !_isTapped),
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: _isTapped ? Colors.blue.shade50 : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [BoxShadow(blurRadius: 5, color: Colors.grey.shade300)],
+        ),
+        child: Row(
           children: [
-            DrawerHeader(child: Text("Menu")),
-            ListTile(
-              title: Text("Screen A"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ScreenA()),
-                );
-              },
-            ),
-            ListTile(
-              title: Text("Screen B"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => ScreenB()),
-                );
-              },
+            Image.network(widget.data['image']!, width: 50, height: 50),
+            SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.data['title']!,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(widget.data['subtitle']!),
+                  Text(
+                    widget.data['desc']!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      body: Center(child: Text("Home")),
-    );
-  }
-}
-
-class ScreenA extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Screen A")),
-      body: Center(child: Text("Screen A")),
-    );
-  }
-}
-
-class ScreenB extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("Screen B")),
-      body: Center(child: Text("Screen B")),
     );
   }
 }
